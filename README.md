@@ -18,7 +18,7 @@ A highly optimized, structured, and production-ready Go CLI template project. De
 - **Graceful Shutdowns**: Global context listening for OS termination signals (`SIGINT`, `SIGTERM`) passed down to all subcommands.
 - **DX Tooling**:
   - `Makefile` for compiling, testing, coverage analysis, linting, and cross-compiling.
-  - `rename.sh` helper to instantly re-namespace the Go module path.
+  - `rename.sh` (Unix) and `rename.ps1` (Windows) helpers to instantly re-namespace the Go module path.
   - `.golangci.yml` lint rules preset.
   - GitHub Actions CI workflow setup.
 
@@ -50,7 +50,8 @@ goclitmpl/
 │   └── greeting/       # Example business logic greeting package
 │       ├── greeting.go
 │       └── greeting_test.go
-├── rename.sh           # Script to quickly rename module imports
+├── rename.ps1          # Script to quickly rename module imports on Windows (PowerShell)
+├── rename.sh           # Script to quickly rename module imports on Unix (bash)
 ├── config.example.yaml # Example YAML configuration file
 ├── go.mod              # Go module descriptor
 └── README.md           # Project documentation
@@ -63,8 +64,14 @@ goclitmpl/
 ### 1. Rename the Module
 Run the helper script to update module references from `github.com/dat267/goclitmpl` to your desired repository name:
 
+On Linux/macOS:
 ```bash
 ./rename.sh github.com/your-username/your-cli-project
+```
+
+On Windows (PowerShell):
+```powershell
+.\rename.ps1 -NewModule github.com/your-username/your-cli-project
 ```
 
 ### 2. Run the Tests
