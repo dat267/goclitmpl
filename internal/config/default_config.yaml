@@ -1,0 +1,22 @@
+# goclitmpl Configuration File
+# Read more at: github.com/dat267/goclitmpl
+
+app:
+  # The run environment (production, staging, development)
+  env: "production"
+
+  # Enable debugging configurations
+  debug: false
+
+  # Port to listen on
+  port: 8080
+
+log:
+  # Logging verbosity level (debug, info, warn, error)
+  level: "info"
+
+  # Output format (text or json)
+  format: "text"
+
+  # Optional path to write structured log files (e.g., ~/.cache/goclitmpl/app.log)
+  # file_path: ""

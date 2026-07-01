@@ -1,0 +1,6 @@
+app:
+  port: 9000
+  env: development
+log:
+  level: debug
+  format: json
