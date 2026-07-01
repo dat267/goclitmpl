@@ -51,6 +51,8 @@ func (m *MultiHandler) Enabled(ctx context.Context, level slog.Level) bool {
 }
 
 // Handle clones records and broadcasts them to all enabled handlers.
+//
+//nolint:gocritic // copying slog.Record by value is required to implement the standard library slog.Handler interface
 func (m *MultiHandler) Handle(ctx context.Context, r slog.Record) error {
 	for _, h := range m.handlers {
 		if h.Enabled(ctx, r.Level) {
@@ -110,11 +112,11 @@ func SetupLogging(cfg LogConfig, w io.Writer) {
 	// Ensure parent directory for log file exists
 	dir := filepath.Dir(cfg.FilePath)
 	if dir != "." && dir != "" {
-		_ = os.MkdirAll(dir, 0755)
+		_ = os.MkdirAll(dir, 0o755)
 	}
 
 	// Open the log file in write-only append mode
-	file, err := os.OpenFile(cfg.FilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	file, err := os.OpenFile(cfg.FilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o644)
 	if err != nil {
 		// Fallback to console-only log configuration on error
 		slog.SetDefault(slog.New(consoleHandler))

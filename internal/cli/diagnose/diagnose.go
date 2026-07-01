@@ -1,3 +1,4 @@
+// Package diagnose provides system and connection health tools.
 package diagnose
 
 import (

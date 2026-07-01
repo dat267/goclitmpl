@@ -1,3 +1,4 @@
+// Package config loads and validates application parameters.
 package config
 
 import (
@@ -88,6 +89,7 @@ func Load(configFile string) (*Config, error) {
 		}
 
 		// Path 3: System configuration (/etc/goclitmpl/config.yaml)
+		//nolint:gocritic // /etc is a standard system directory path
 		v.AddConfigPath(filepath.Join("/etc", AppName))
 	}
 

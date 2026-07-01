@@ -1,3 +1,4 @@
+// Package greeting provides core business rules for greeting messages.
 package greeting
 
 import (

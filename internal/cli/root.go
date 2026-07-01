@@ -19,7 +19,7 @@ const (
 
 // NewRootCmd creates the root Cobra command.
 // We accept stdout and stderr writers to make the commands easily testable.
-func NewRootCmd(out io.Writer, errOut io.Writer) *cobra.Command {
+func NewRootCmd(out, errOut io.Writer) *cobra.Command {
 	var configFile string
 	var verbose bool
 	var logFormat string

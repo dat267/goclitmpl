@@ -88,7 +88,7 @@ log:
   format: json
 `
 	configFilePath := filepath.Join(tempDir, "test-config.yaml")
-	if err := os.WriteFile(configFilePath, []byte(configContent), 0644); err != nil {
+	if err := os.WriteFile(configFilePath, []byte(configContent), 0o644); err != nil {
 		t.Fatalf("failed to write temp config file: %v", err)
 	}
 
