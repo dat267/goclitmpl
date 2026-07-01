@@ -42,7 +42,7 @@ lint:
 		golangci-lint run; \
 	else \
 		echo "Warning: golangci-lint is not installed. Skipping. Install via: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"; \
-	}
+	fi
 
 fmt:
 	@echo "==> Formatting code..."
