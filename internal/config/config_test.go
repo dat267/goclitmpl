@@ -88,7 +88,8 @@ log:
   format: json
 `
 	configFilePath := filepath.Join(tempDir, "test-config.yaml")
-	if err := os.WriteFile(configFilePath, []byte(configContent), 0o600); err != nil {
+	err = os.WriteFile(configFilePath, []byte(configContent), 0o600)
+	if err != nil {
 		t.Fatalf("failed to write temp config file: %v", err)
 	}
 
@@ -138,7 +139,8 @@ func TestLoggingSetupWithFile(t *testing.T) {
 	}
 
 	// 2. Verify file output exists
-	if _, err := os.Stat(logFilePath); os.IsNotExist(err) {
+	_, err = os.Stat(logFilePath)
+	if os.IsNotExist(err) {
 		t.Fatalf("log file was not created: %s", logFilePath)
 	}
 

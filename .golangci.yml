@@ -23,7 +23,8 @@ linters:
 
 linters-settings:
   govet:
-    shadow: true
+    enable:
+      - shadow
   revive:
     rules:
       - name: exported
