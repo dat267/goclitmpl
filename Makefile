@@ -1,4 +1,4 @@
-.PHONY: all build run test test-coverage lint fmt clean help cross-compile
+.PHONY: all build run test test-coverage lint vulncheck fmt clean help cross-compile
 
 # Build parameters
 BINARY_NAME=goclitmpl
@@ -16,7 +16,7 @@ LDFLAGS=-ldflags="-s -w \
 	-X github.com/dat267/goclitmpl/internal/cli.Commit=$(COMMIT) \
 	-X github.com/dat267/goclitmpl/internal/cli.Date=$(DATE)"
 
-all: fmt lint test build
+all: fmt lint vulncheck test build
 
 build:
 	@echo "==> Building binary to $(BUILD_DIR)/$(BINARY_NAME)..."
@@ -42,6 +42,14 @@ lint:
 		golangci-lint run; \
 	else \
 		echo "Warning: golangci-lint is not installed. Skipping. Install via: go install github.com/golangci/golangci-lint/cmd/golangci-lint@latest"; \
+	fi
+
+vulncheck:
+	@echo "==> Running govulncheck..."
+	@if command -v govulncheck >/dev/null; then \
+		govulncheck ./...; \
+	else \
+		echo "Warning: govulncheck is not installed. Skipping. Install via: go install golang.org/x/vuln/cmd/govulncheck@latest"; \
 	fi
 
 fmt:

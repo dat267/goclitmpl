@@ -112,11 +112,11 @@ func SetupLogging(cfg LogConfig, w io.Writer) {
 	// Ensure parent directory for log file exists
 	dir := filepath.Dir(cfg.FilePath)
 	if dir != "." && dir != "" {
-		_ = os.MkdirAll(dir, 0o755)
+		_ = os.MkdirAll(dir, 0o700)
 	}
 
 	// Open the log file in write-only append mode
-	file, err := os.OpenFile(cfg.FilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o644)
+	file, err := os.OpenFile(cfg.FilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0o600)
 	if err != nil {
 		// Fallback to console-only log configuration on error
 		slog.SetDefault(slog.New(consoleHandler))

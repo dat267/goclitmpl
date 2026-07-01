@@ -260,4 +260,12 @@ To keep commands automation-friendly and compliant with standard UNIX behaviors:
 * **Stdout**: Write actual data outputs (JSON strings, text lines, data pipelines) using `fmt.Fprint(cmd.OutOrStdout(), ...)` (which will inherit standard out redirects correctly).
 * **Stderr**: Write log statements, debug outputs, warnings, and system status information using `slog.Info`, `slog.Error`, etc. (which output to standard error).
 * **OS Signals & Cancellation**: Check context completion `cmd.Context().Done()` during long-running tasks to support graceful termination on Ctrl+C.
+
+---
+
+## 7. Security and Vulnerability Scanning
+
+To maintain a secure software supply chain and catch security bugs early:
+* **SAST Scanning (`gosec`)**: Code security checking is enabled natively as a linter within `.golangci.yml`. It runs automatically during `make lint` or CI actions, validating cryptographic usage, file permissions, and data validation boundaries.
+* **Vulnerability Auditing (`govulncheck`)**: Go's official vulnerability tool is integrated inside the CI actions run and via `make vulncheck`. It uses call-path aware analysis to identify if your code imports any dependencies with known active CVE vulnerabilities.
 ```

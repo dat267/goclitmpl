@@ -55,12 +55,12 @@ func NewConfigInitCmd() *cobra.Command {
 			templateBytes := config.GetDefaultConfigTemplate()
 
 			// Ensure config directory exists
-			if err := os.MkdirAll(configDir, 0o755); err != nil {
+			if err := os.MkdirAll(configDir, 0o700); err != nil {
 				return fmt.Errorf("failed to create config directory %s: %w", configDir, err)
 			}
 
 			// Write default configuration file
-			if err := os.WriteFile(configPath, templateBytes, 0o644); err != nil {
+			if err := os.WriteFile(configPath, templateBytes, 0o600); err != nil {
 				return fmt.Errorf("failed to write configuration file %s: %w", configPath, err)
 			}
 

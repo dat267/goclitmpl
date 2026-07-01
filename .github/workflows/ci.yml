@@ -46,3 +46,15 @@ jobs:
 
       - name: Build Binary
         run: go build -v ./cmd/goclitmpl
+
+  vulncheck:
+    name: Vulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Govulncheck
+        uses: golang/govulncheck-action@v1
+        with:
+          go-version-file: 'go.mod'

@@ -13,6 +13,7 @@ linters:
     - goconst
     - gocritic
     - revive
+    - gosec
     - unparam
     - misspell
     - dogsled
@@ -37,6 +38,9 @@ linters-settings:
       - performance
       - experimental
       - opinionated
+  gosec:
+    excludes:
+      - G104 # Handled separately and more granularly by the errcheck linter
   errcheck:
     exclude-functions:
       - fmt.Fprintf

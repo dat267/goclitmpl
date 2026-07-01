@@ -88,7 +88,7 @@ log:
   format: json
 `
 	configFilePath := filepath.Join(tempDir, "test-config.yaml")
-	if err := os.WriteFile(configFilePath, []byte(configContent), 0o644); err != nil {
+	if err := os.WriteFile(configFilePath, []byte(configContent), 0o600); err != nil {
 		t.Fatalf("failed to write temp config file: %v", err)
 	}
 
@@ -143,6 +143,7 @@ func TestLoggingSetupWithFile(t *testing.T) {
 	}
 
 	// 3. Verify file output content (should be JSON)
+	//nolint:gosec // safe file read inside unit test
 	fileBytes, err := os.ReadFile(logFilePath)
 	if err != nil {
 		t.Fatalf("failed to read log file: %v", err)
