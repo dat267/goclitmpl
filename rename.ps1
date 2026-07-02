@@ -15,7 +15,7 @@ Write-Host "Renaming application name from '$OldApp' to '$NewApp'..." -Foregroun
 Write-Host "Renaming environment prefix from '$OldEnv' to '$NewEnv'..." -ForegroundColor Cyan
 
 # Gather all target files in the project
-$files = Get-ChildItem -Recurse -File -Include *.go, go.mod, go.sum, Makefile, *.md, *.yml, *.yaml
+$files = Get-ChildItem -Recurse -File -Include *.go, go.mod, go.sum, Makefile, *.md, *.yml, *.yaml, *.ps1, *.sh
 
 foreach ($file in $files) {
     # Skip standard hidden directories (e.g. .git)

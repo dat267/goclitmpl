@@ -45,6 +45,10 @@ This document contains rules and instructions for agentic AI coders working on t
   ```bash
   make all
   ```
+  Or on Windows (PowerShell):
+  ```powershell
+  .\build.ps1
+  ```
   This runs code formatting (`go fmt`), unit tests with the race detector (`go test -race`), security scanning (`govulncheck`), and standard linting.
 * **Test Isolation**: Unit tests must not pollute the developer's home directory. Always isolate file creation tests using Go's built-in `t.TempDir()` or environment overrides via `t.Setenv()`.
 * **Linter Warnings**: Zero linter warnings are permitted. Add inline `//nolint:...` overrides only for verified false positives (such as `slog.Record` copy-by-value in custom log handlers).

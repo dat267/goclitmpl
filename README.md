@@ -50,6 +50,7 @@ goclitmpl/
 │   └── greeting/       # Example business logic greeting package
 │       ├── greeting.go
 │       └── greeting_test.go
+├── build.ps1           # Script to build, test, and lint on Windows (PowerShell)
 ├── rename.ps1          # Script to quickly rename module imports on Windows (PowerShell)
 ├── rename.sh           # Script to quickly rename module imports on Unix (bash)
 ├── config.example.yaml # Example YAML configuration file
@@ -75,17 +76,27 @@ On Windows (PowerShell):
 ```
 
 ### 2. Run the Tests
-Ensure everything is correctly configured by executing unit tests:
-
+On Linux/macOS:
 ```bash
 make test
+```
+
+On Windows (PowerShell):
+```powershell
+.\build.ps1 -Task test
 ```
 
 ### 3. Build & Run
 Compile the optimized binary into the `bin/` directory:
 
+On Linux/macOS:
 ```bash
 make build
+```
+
+On Windows (PowerShell):
+```powershell
+.\build.ps1 -Task build
 ```
 
 Then run your command:

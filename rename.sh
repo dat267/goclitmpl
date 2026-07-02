@@ -24,18 +24,18 @@ echo "Renaming environment prefix from '$OLD_ENV' to '$NEW_ENV'..."
 OS_NAME=$(uname)
 if [ "$OS_NAME" = "Darwin" ]; then
     # Replace module namespace
-    find . -type f \( -name "*.go" -o -name "go.mod" -o -name "go.sum" -o -name "Makefile" -o -name "*.md" -o -name "*.yml" -o -name "*.yaml" \) -exec sed -i '' "s|$OLD_MOD|$NEW_MOD|g" {} +
+    find . -type f \( -name "*.go" -o -name "go.mod" -o -name "go.sum" -o -name "Makefile" -o -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.ps1" -o -name "*.sh" \) -exec sed -i '' "s|$OLD_MOD|$NEW_MOD|g" {} +
     # Replace AppName/binary name
-    find . -type f \( -name "*.go" -o -name "go.mod" -o -name "go.sum" -o -name "Makefile" -o -name "*.md" -o -name "*.yml" -o -name "*.yaml" \) -exec sed -i '' "s|$OLD_APP|$NEW_APP|g" {} +
+    find . -type f \( -name "*.go" -o -name "go.mod" -o -name "go.sum" -o -name "Makefile" -o -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.ps1" -o -name "*.sh" \) -exec sed -i '' "s|$OLD_APP|$NEW_APP|g" {} +
     # Replace EnvPrefix
-    find . -type f \( -name "*.go" -o -name "Makefile" \) -exec sed -i '' "s|$OLD_ENV|$NEW_ENV|g" {} +
+    find . -type f \( -name "*.go" -o -name "Makefile" -o -name "*.ps1" -o -name "*.sh" \) -exec sed -i '' "s|$OLD_ENV|$NEW_ENV|g" {} +
 else
     # Replace module namespace
-    find . -type f \( -name "*.go" -o -name "go.mod" -o -name "go.sum" -o -name "Makefile" -o -name "*.md" -o -name "*.yml" -o -name "*.yaml" \) -exec sed -i "s|$OLD_MOD|$NEW_MOD|g" {} +
+    find . -type f \( -name "*.go" -o -name "go.mod" -o -name "go.sum" -o -name "Makefile" -o -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.ps1" -o -name "*.sh" \) -exec sed -i "s|$OLD_MOD|$NEW_MOD|g" {} +
     # Replace AppName/binary name
-    find . -type f \( -name "*.go" -o -name "go.mod" -o -name "go.sum" -o -name "Makefile" -o -name "*.md" -o -name "*.yml" -o -name "*.yaml" \) -exec sed -i "s|$OLD_APP|$NEW_APP|g" {} +
+    find . -type f \( -name "*.go" -o -name "go.mod" -o -name "go.sum" -o -name "Makefile" -o -name "*.md" -o -name "*.yml" -o -name "*.yaml" -o -name "*.ps1" -o -name "*.sh" \) -exec sed -i "s|$OLD_APP|$NEW_APP|g" {} +
     # Replace EnvPrefix
-    find . -type f \( -name "*.go" -o -name "Makefile" \) -exec sed -i "s|$OLD_ENV|$NEW_ENV|g" {} +
+    find . -type f \( -name "*.go" -o -name "Makefile" -o -name "*.ps1" -o -name "*.sh" \) -exec sed -i "s|$OLD_ENV|$NEW_ENV|g" {} +
 fi
 
 # Rename the main entrypoint cmd directory
