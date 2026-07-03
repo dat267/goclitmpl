@@ -90,15 +90,32 @@ func TestGreetCommand(t *testing.T) {
 }
 
 func TestConfigInitCommand(t *testing.T) {
-	t.Run("fails without args on existing run", func(t *testing.T) {
-		// Detailed logic tests live in pkg/configinit; just verify the command
-		// wiring is correct by ensuring it does not panic and returns a cobra command.
-		cmd := NewConfigInitCmd()
-		if cmd == nil {
-			t.Fatal("expected NewConfigInitCmd to return a non-nil command")
-		}
-		if cmd.Use != "init" {
-			t.Errorf("expected command Use to be 'init', got %q", cmd.Use)
-		}
-	})
+	cmd := newConfigInitCmd()
+	if cmd == nil {
+		t.Fatal("expected newConfigInitCmd to return a non-nil command")
+	}
+	if cmd.Use != "init" {
+		t.Errorf("expected Use='init', got %q", cmd.Use)
+	}
 }
+
+func TestDiagnoseCommand(t *testing.T) {
+	cmd := NewDiagnoseCmd()
+	if cmd == nil {
+		t.Fatal("expected NewDiagnoseCmd to return a non-nil command")
+	}
+	if cmd.Use != "diagnose" {
+		t.Errorf("expected Use='diagnose', got %q", cmd.Use)
+	}
+
+	uses := map[string]bool{}
+	for _, sub := range cmd.Commands() {
+		uses[sub.Use] = true
+	}
+	for _, want := range []string{"info", "check [address]", "run"} {
+		if !uses[want] {
+			t.Errorf("expected subcommand %q to be registered under diagnose", want)
+		}
+	}
+}
+

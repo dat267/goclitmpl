@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"os"
 
-	"github.com/dat267/goclitmpl/internal/cli/diagnose"
 	"github.com/dat267/goclitmpl/internal/config"
 	"github.com/spf13/cobra"
 )
@@ -81,7 +80,7 @@ building production-ready CLI applications in Go.`,
 		NewVersionCmd(),
 		NewGreetCmd(),
 		NewConfigCmd(),
-		diagnose.NewDiagnoseCmd(),
+		NewDiagnoseCmd(),
 	)
 
 	return cmd

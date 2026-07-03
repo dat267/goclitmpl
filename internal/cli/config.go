@@ -1,31 +1,28 @@
-// Package cli implements Cobra command routers.
 package cli
 
 import (
-	"github.com/dat267/goclitmpl/pkg/configinit"
+	pkgconfig "github.com/dat267/goclitmpl/pkg/config"
 	"github.com/spf13/cobra"
 )
 
-// NewConfigCmd creates the base "config" command.
+// NewConfigCmd creates the "config" parent command.
 func NewConfigCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "config",
 		Short: "Manage CLI configuration options",
 		Long:  `Initialize or update configuration parameters for the application.`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// If no subcommand is specified, show help
 			return cmd.Help()
 		},
 	}
 
-	// Add subcommands
-	cmd.AddCommand(NewConfigInitCmd())
+	cmd.AddCommand(newConfigInitCmd())
 
 	return cmd
 }
 
-// NewConfigInitCmd creates the "config init" command.
-func NewConfigInitCmd() *cobra.Command {
+// newConfigInitCmd calls pkg/config.Initialize to write the default config file.
+func newConfigInitCmd() *cobra.Command {
 	var force bool
 
 	cmd := &cobra.Command{
@@ -34,7 +31,7 @@ func NewConfigInitCmd() *cobra.Command {
 		Long:  `Generates a standard default YAML configuration file in the user's home configuration directory.`,
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return configinit.Initialize(cmd.OutOrStdout(), force)
+			return pkgconfig.Initialize(cmd.OutOrStdout(), force)
 		},
 	}
 
