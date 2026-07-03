@@ -39,7 +39,7 @@ This document contains rules and instructions for agentic AI coders working on t
 
 ---
 
-## 5. Testing, Linting, & Isolation Rigor
+## 5. Linting & Build Verification
 
 * **Local Verification**: Before declaring any change complete, run the full validation suite locally:
   ```bash
@@ -49,7 +49,7 @@ This document contains rules and instructions for agentic AI coders working on t
   ```powershell
   .\build.ps1
   ```
-  This runs code formatting (`go fmt`), unit tests with the race detector (`go test -race`), security scanning (`govulncheck`), and standard linting.
-* **Test Isolation**: Unit tests must not pollute the developer's home directory. Always isolate file creation tests using Go's built-in `t.TempDir()` or environment overrides via `t.Setenv()`.
+  This runs code formatting (`go fmt`), security scanning (`govulncheck`), and standard linting.
+* **No Test Files**: This is a template repository. Test files (`_test.go`) are intentionally omitted so consumers can write tests tailored to their own business logic. Do **not** add `_test.go` files unless the user explicitly requests them.
 * **Linter Warnings**: Zero linter warnings are permitted. Add inline `//nolint:...` overrides only for verified false positives (such as `slog.Record` copy-by-value in custom log handlers).
-* **Test Coverage**: Every new subcommand or package must have a matching unit test file (e.g. `_test.go`) covering successful execution paths and error states.
+
