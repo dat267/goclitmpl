@@ -10,14 +10,17 @@ import (
 )
 
 // NewDiagnoseCmd creates the "diagnose" parent command and registers all subcommands.
+// No RunE is defined — Cobra shows help automatically when called with no subcommand.
 func NewDiagnoseCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "diagnose",
 		Short: "System diagnosis and connectivity tools",
 		Long:  `Perform local system checks, verify environment variables, and probe remote network connections.`,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return cmd.Help()
-		},
+		Example: `  goclitmpl diagnose info
+  goclitmpl diagnose check github.com:443
+  goclitmpl diagnose check --timeout 2s 1.1.1.1:53
+  goclitmpl diagnose run
+  goclitmpl diagnose run --timeout 10s`,
 	}
 
 	cmd.PersistentFlags().Duration("timeout", 5*time.Second, "max timeout duration for running diagnostics")
@@ -34,10 +37,11 @@ func NewDiagnoseCmd() *cobra.Command {
 // newDiagnoseInfoCmd calls pkg/diagnose.PrintInfo to display hardware and runtime specs.
 func newDiagnoseInfoCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "info",
-		Short: "Print local system hardware and runtime specifications",
-		Long:  `Gathers and displays local OS version, CPU count, Go environment parameters, and platform architecture.`,
-		Args:  cobra.NoArgs,
+		Use:     "info",
+		Short:   "Print local system hardware and runtime specifications",
+		Long:    `Gathers and displays local OS version, CPU count, Go environment parameters, and platform architecture.`,
+		Example: `  goclitmpl diagnose info`,
+		Args:    cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			diagnose.PrintInfo(cmd.OutOrStdout())
 			return nil
@@ -50,8 +54,12 @@ func newDiagnoseCheckCmd() *cobra.Command {
 	return &cobra.Command{
 		Use:   "check [address]",
 		Short: "Validate network connection to a remote target",
-		Long:  `Probes remote server connection availability using TCP handshakes. Default target is google.com:80.`,
-		Args:  cobra.MaximumNArgs(1),
+		Long: `Probes remote server connection availability using a TCP handshake.
+Defaults to google.com:80 when no address is provided.`,
+		Example: `  goclitmpl diagnose check
+  goclitmpl diagnose check github.com:443
+  goclitmpl diagnose check --timeout 2s 1.1.1.1:53`,
+		Args: cobra.MaximumNArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			address := "google.com:80"
 			if len(args) > 0 && strings.TrimSpace(args[0]) != "" {
@@ -76,10 +84,12 @@ func newDiagnoseCheckCmd() *cobra.Command {
 // newDiagnoseRunCmd calls pkg/diagnose.RunSuite to run the full diagnostics suite.
 func newDiagnoseRunCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "run",
-		Short: "Execute a full diagnostics checklist",
-		Long:  `Runs all system specification diagnostics and queries standard network connection endpoints sequentially.`,
-		Args:  cobra.NoArgs,
+		Use:     "run",
+		Short:   "Execute a full diagnostics checklist",
+		Long:    `Runs all system specification diagnostics and queries standard network connection endpoints sequentially.`,
+		Example: `  goclitmpl diagnose run
+  goclitmpl diagnose run --timeout 10s`,
+		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			timeout, err := cmd.Flags().GetDuration("timeout")
 			if err != nil {

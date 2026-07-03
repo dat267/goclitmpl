@@ -23,7 +23,9 @@ func NewVersionCmd() *cobra.Command {
 		Use:   "version",
 		Short: "Print application version information",
 		Long:  `Displays compiler version, git commit hash, build timestamps, and runtime environment specifications.`,
-		Args:  cobra.NoArgs,
+		Example: `  goclitmpl version
+  goclitmpl version --json`,
+		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return version.FormatVersion(cmd.OutOrStdout(), Version, Commit, Date, jsonOutput)
 		},

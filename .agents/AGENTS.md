@@ -17,7 +17,7 @@ This document contains rules and instructions for agentic AI coders working on t
 * **Argument Validation**: Always validate user arguments within Cobra commands using explicit arg count limits (e.g., `Args: cobra.NoArgs` or `Args: cobra.ExactArgs(1)`).
 * **Return Errors**: Implement Cobra subcommand runners using `RunE` instead of `Run` to propagate execution errors back to [cli.Execute()](file:///home/dat/repos/goclitmpl/internal/cli/root.go) for unified logging and clean exit code processing.
 * **Separation of Streams**:
-  * **Stdout**: Write raw commands output (such as JSON data or version text) using `cmd.OutOrStdout()` or `fmt.Fprintf(cmd.OutOrStdout(), ...)`.
+  * **Stdout**: Write raw command output (such as JSON data or version text) using `cmd.OutOrStdout()` or `fmt.Fprintf(cmd.OutOrStdout(), ...)`.
   * **Stderr**: Reserve exclusively for structured logging (`slog`), diagnostic progress bars, warnings, or debug messages. Never mix output streams.
 
 ---
@@ -53,3 +53,14 @@ This document contains rules and instructions for agentic AI coders working on t
 * **No Test Files**: This is a template repository. Test files (`_test.go`) are intentionally omitted so consumers can write tests tailored to their own business logic. Do **not** add `_test.go` files unless the user explicitly requests them.
 * **Linter Warnings**: Zero linter warnings are permitted. Add inline `//nolint:...` overrides only for verified false positives (such as `slog.Record` copy-by-value in custom log handlers).
 
+---
+
+## 6. Nested Subcommand Best Practices
+
+* **Group commands must not define `RunE`**: A parent command that only groups subcommands (e.g., `config`, `diagnose`) must **not** define a `Run` or `RunE` function. Cobra automatically shows the help page when such a command is invoked with no subcommand. Defining `RunE: func(...) { return cmd.Help() }` is redundant and should be removed.
+* **`SilenceErrors: true` on root**: Set `SilenceErrors: true` on the root command and print the error explicitly in `Execute()`. This prevents Cobra from double-printing errors when both the command and the caller handle them.
+* **`SilenceUsage` after validation only**: Set `cmd.SilenceUsage = true` inside `PersistentPreRunE` (not at construction time) so that flag-parsing errors still display usage, but runtime errors do not.
+* **`Example` fields on every command**: Every command (parent and leaf) must define an `Example` field with at least one concrete invocation string to aid discoverability via `--help`.
+* **Required vs optional arg notation in `Use`**: Use angle brackets for required positional arguments (`<name>`) and square brackets for optional ones (`[address]`). Example: `Use: "greet <name>"`.
+* **`PersistentFlags` for shared flags**: Flags consumed by multiple subcommands (e.g., `--timeout` on `diagnose`) must be defined via `cmd.PersistentFlags()` on the parent, not repeated per-subcommand. Access them from leaf commands via `cmd.Flags().GetXxx("flag-name")`.
+* **Subcommand file layout**: Each CLI command lives in `internal/cli/<cmd>.go`. All subcommands of `<cmd>` are defined in that same file using unexported constructor functions (e.g., `newDiagnoseInfoCmd()`). Business logic lives in the corresponding `pkg/<cmd>/` package.

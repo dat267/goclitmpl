@@ -6,14 +6,14 @@ import (
 )
 
 // NewConfigCmd creates the "config" parent command.
+// No RunE is defined — Cobra shows help automatically when called with no subcommand.
 func NewConfigCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "config",
 		Short: "Manage CLI configuration options",
 		Long:  `Initialize or update configuration parameters for the application.`,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			return cmd.Help()
-		},
+		Example: `  goclitmpl config init
+  goclitmpl config init --force`,
 	}
 
 	cmd.AddCommand(newConfigInitCmd())
@@ -26,10 +26,12 @@ func newConfigInitCmd() *cobra.Command {
 	var force bool
 
 	cmd := &cobra.Command{
-		Use:   "init",
-		Short: "Initialize default configuration file",
-		Long:  `Generates a standard default YAML configuration file in the user's home configuration directory.`,
-		Args:  cobra.NoArgs,
+		Use:     "init",
+		Short:   "Initialize default configuration file",
+		Long:    `Generates a standard default YAML configuration file in the user's home configuration directory.`,
+		Example: `  goclitmpl config init
+  goclitmpl config init --force`,
+		Args: cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			return pkgconfig.Initialize(cmd.OutOrStdout(), force)
 		},

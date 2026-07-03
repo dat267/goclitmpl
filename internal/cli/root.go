@@ -2,6 +2,7 @@ package cli
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log/slog"
 	"os"
@@ -28,6 +29,14 @@ func NewRootCmd(out, errOut io.Writer) *cobra.Command {
 		Short: "goclitmpl is an optimized Go CLI template project",
 		Long: `An optimized, structured, and extensible boilerplate template for 
 building production-ready CLI applications in Go.`,
+		Example: `  goclitmpl greet Alice
+  goclitmpl greet Alice --uppercase
+  goclitmpl diagnose info
+  goclitmpl diagnose check github.com:443
+  goclitmpl diagnose run --timeout 10s
+  goclitmpl version --json
+  goclitmpl config init`,
+		SilenceErrors: true, // errors are printed by Execute(), not by Cobra
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			// 1. Load configuration
 			cfg, err := config.Load(configFile)
@@ -45,7 +54,7 @@ building production-ready CLI applications in Go.`,
 
 			// 3. Initialize structured logging
 			config.SetupLogging(cfg.Log, errOut)
-			cmd.SilenceUsage = true // Don't print usage instructions on execution errors
+			cmd.SilenceUsage = true // suppress usage on runtime errors (not flag errors)
 
 			// 4. Store configuration in the command context
 			ctx := context.WithValue(cmd.Context(), configKey, cfg)
@@ -59,10 +68,6 @@ building production-ready CLI applications in Go.`,
 			)
 
 			return nil
-		},
-		RunE: func(cmd *cobra.Command, args []string) error {
-			// By default, if no subcommand is executed, show help
-			return cmd.Help()
 		},
 	}
 
@@ -96,11 +101,11 @@ func GetConfig(ctx context.Context) *config.Config {
 }
 
 // Execute runs the root command with default OS stdout, stderr, and arguments.
+// Errors are printed here rather than by Cobra to avoid double output.
 func Execute(ctx context.Context) int {
 	cmd := NewRootCmd(os.Stdout, os.Stderr)
 	if err := cmd.ExecuteContext(ctx); err != nil {
-		// Output error if silencing usage prevented it, but since Cobra handles it,
-		// we just return a non-zero exit code.
+		fmt.Fprintln(os.Stderr, "Error:", err)
 		return 1
 	}
 	return 0

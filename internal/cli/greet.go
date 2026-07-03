@@ -13,10 +13,12 @@ func NewGreetCmd() *cobra.Command {
 	var uppercase bool
 
 	cmd := &cobra.Command{
-		Use:   "greet [name]",
+		Use:   "greet <name>",
 		Short: "Greets a user",
 		Long:  `Greets a user with customizable options while referencing loaded configuration.`,
-		Args:  cobra.ExactArgs(1),
+		Example: `  goclitmpl greet Alice
+  goclitmpl greet Alice --uppercase`,
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			name := args[0]
 			cfg := GetConfig(cmd.Context())
