@@ -1,9 +1,7 @@
 package diagnose
 
 import (
-	"fmt"
-	"runtime"
-
+	"github.com/dat267/goclitmpl/pkg/diagnose"
 	"github.com/spf13/cobra"
 )
 
@@ -15,14 +13,7 @@ func NewDiagnoseInfoCmd() *cobra.Command {
 		Long:  `Gathers and displays local OS version, CPU count, Go environment parameters, and platform architecture.`,
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			out := cmd.OutOrStdout()
-
-			fmt.Fprintf(out, "System Runtime Specifications:\n")
-			fmt.Fprintf(out, "  Operating System: %s\n", runtime.GOOS)
-			fmt.Fprintf(out, "  Architecture:     %s\n", runtime.GOARCH)
-			fmt.Fprintf(out, "  Go Version:       %s\n", runtime.Version())
-			fmt.Fprintf(out, "  CPU Count:        %d\n", runtime.NumCPU())
-
+			diagnose.PrintInfo(cmd.OutOrStdout())
 			return nil
 		},
 	}

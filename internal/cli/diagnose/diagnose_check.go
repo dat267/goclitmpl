@@ -2,10 +2,9 @@ package diagnose
 
 import (
 	"fmt"
-	"log/slog"
-	"net"
 	"strings"
 
+	"github.com/dat267/goclitmpl/pkg/diagnose"
 	"github.com/spf13/cobra"
 )
 
@@ -29,14 +28,11 @@ func NewDiagnoseCheckCmd() *cobra.Command {
 				return fmt.Errorf("failed to retrieve timeout: %w", err)
 			}
 
-			slog.Debug("checking network reachability", slog.String("address", address), slog.Duration("timeout", timeout))
-
 			// Perform TCP connection probe
-			conn, err := net.DialTimeout("tcp", address, timeout)
+			err = diagnose.CheckAddress(address, timeout)
 			if err != nil {
 				return fmt.Errorf("network connection to %s failed: %w", address, err)
 			}
-			defer conn.Close()
 
 			fmt.Fprintf(cmd.OutOrStdout(), "Successfully connected to %s!\n", address)
 			return nil
