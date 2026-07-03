@@ -84,8 +84,8 @@ building production-ready CLI applications in Go.`,
 	cmd.AddCommand(
 		NewVersionCmd(),
 		NewGreetCmd(),
-		NewConfigCmd(),
-		NewDiagnoseCmd(),
+		newConfigCmd(),
+		newDiagnoseCmd(),
 	)
 
 	return cmd

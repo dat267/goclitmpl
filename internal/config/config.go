@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-//go:embed default_config.yaml
+//go:embed default.yaml
 var defaultConfigTemplate []byte
 
 // GetDefaultConfigTemplate returns the embedded default configuration file.
