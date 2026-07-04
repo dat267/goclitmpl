@@ -27,9 +27,9 @@ jobs:
           - { goos: linux, goarch: arm }
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-go@v5
+      - uses: actions/setup-go@v6
         with:
           go-version-file: go.mod
           cache: true
@@ -60,7 +60,7 @@ jobs:
               -X github.com/dat267/goclitmpl/internal/cli.Date=${BUILD_DATE}" \
             -o "$OUT" ./cmd/goclitmpl
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ env.BIN_NAME }}-${{ matrix.goos }}-${{ matrix.goarch }}
           path: ${{ env.BIN_NAME }}-${{ matrix.goos }}-${{ matrix.goarch }}*
@@ -69,7 +69,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           merge-multiple: true
 
@@ -80,7 +80,7 @@ jobs:
           echo "tag=${{ env.BIN_NAME }}/${SHORT_SHA}" >> "$GITHUB_OUTPUT"
           echo "name=Release ${{ env.BIN_NAME }}/${SHORT_SHA}" >> "$GITHUB_OUTPUT"
 
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           tag_name:               ${{ steps.meta.outputs.tag }}
           name:                   ${{ steps.meta.outputs.name }}
