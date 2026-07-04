@@ -35,21 +35,26 @@ goclitmpl/
 │   └── goclitmpl/
 │       └── main.go     # Program entrypoint (handles signals & context)
 ├── internal/
-│   ├── cli/            # Cobra commands (root, version, example command)
-│   │   ├── diagnose/   # Nested subcommands package (diagnose -> run / info / check)
-│   │   ├── cli_test.go # Testing suite for command behaviors
-│   │   ├── greet.go    # Example subcommand
+│   ├── cli/            # Cobra commands (root, config, diagnose, greet, version)
+│   │   ├── config.go   # Config CLI command (and its subcommands)
+│   │   ├── diagnose.go # Diagnose CLI command (and its subcommands)
+│   │   ├── greet.go    # Greet CLI command
 │   │   ├── root.go     # Root CLI configuration & logging initialization
-│   │   └── version.go  # Version subcommand (text/json & build variables)
+│   │   └── version.go  # Version CLI command
 │   └── config/         # Viper configuration & slog logging initialization
 │       ├── config.go
-│       ├── config_test.go
 │       └── logging.go
 ├── Makefile            # Project tasks runner (build, test, lint, etc.)
 ├── pkg/                # Public/reusable library packages (decoupled logic)
-│   └── greeting/       # Example business logic greeting package
-│       ├── greeting.go
-│       └── greeting_test.go
+│   ├── config/         # Business logic for config management
+│   │   └── init.go
+│   ├── diagnose/       # Business logic for system diagnostics
+│   │   ├── check.go
+│   │   └── info.go
+│   ├── greet/          # Business logic for greeting messages
+│   │   └── greet.go
+│   └── version/        # Business logic for version formatting
+│       └── version.go
 ├── build.ps1           # Script to build, test, and lint on Windows (PowerShell)
 ├── rename.ps1          # Script to quickly rename module imports on Windows (PowerShell)
 ├── rename.sh           # Script to quickly rename module imports on Unix (bash)
@@ -57,6 +62,7 @@ goclitmpl/
 ├── go.mod              # Go module descriptor
 └── README.md           # Project documentation
 ```
+
 
 ---
 
