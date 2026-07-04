@@ -15,8 +15,7 @@ func newDiagnoseCmd() *cobra.Command {
 		Short: "Troubleshoot and verify system health",
 		Example: `  goclitmpl diagnose info
   goclitmpl diagnose check google.com:443
-  goclitmpl diagnose check google.com:443 --timeout 10s
-  goclitmpl diagnose run`,
+  goclitmpl diagnose check google.com:443 --timeout 10s`,
 	}
 
 	// Persistent flags shared by subcommands
@@ -25,7 +24,6 @@ func newDiagnoseCmd() *cobra.Command {
 	cmd.AddCommand(
 		newDiagnoseInfoCmd(),
 		newDiagnoseCheckCmd(),
-		newDiagnoseRunCmd(),
 	)
 	return cmd
 }
@@ -62,25 +60,6 @@ func newDiagnoseCheckCmd() *cobra.Command {
 				return fmt.Errorf("reachability check failed: %w", err)
 			}
 			fmt.Fprintln(cmd.OutOrStdout(), "Endpoint is reachable!")
-			return nil
-		},
-	}
-}
-
-// newDiagnoseRunCmd creates the diagnose run subcommand.
-func newDiagnoseRunCmd() *cobra.Command {
-	return &cobra.Command{
-		Use:   "run",
-		Short: "Execute all diagnostic tests",
-		Example: `  goclitmpl diagnose run
-  goclitmpl diagnose run --timeout 10s`,
-		Args: cobra.NoArgs,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			timeout, err := cmd.Flags().GetDuration("timeout")
-			if err != nil {
-				timeout = 5 * time.Second
-			}
-			diagnose.RunSuite(cmd.OutOrStdout(), timeout)
 			return nil
 		},
 	}

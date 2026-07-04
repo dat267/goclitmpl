@@ -80,24 +80,24 @@ To mount the subcommand, open [internal/cli/root.go](file:///home/dat/repos/gocl
 
 ## 2. Organizing Nested Subcommands
 
-For subcommands of subcommands (e.g., `goclitmpl diagnose run`), do not clutter `root.go` and do not create separate files for each subcommand. Under our **consolidated CLI subcommand layout**, each primary CLI command lives in a single file `internal/cli/<cmd>.go`, and all subcommands of `<cmd>` are defined in that same file using unexported constructor functions (e.g., `newDiagnoseInfoCmd()`, `newDiagnoseCheckCmd()`, `newDiagnoseRunCmd()`).
+For subcommands of subcommands (e.g., `goclitmpl diagnose check`), do not clutter `root.go` and do not create separate files for each subcommand. Under our **consolidated CLI subcommand layout**, each primary CLI command lives in a single file `internal/cli/<cmd>.go`, and all subcommands of `<cmd>` are defined in that same file using unexported constructor functions (e.g., `newDiagnoseInfoCmd()`, `newDiagnoseCheckCmd()`).
 
 Example layout:
 * CLI routers:
-  - `internal/cli/diagnose.go` (defines parent `diagnose` command, its persistent `--timeout` flag, and registers `newDiagnoseInfoCmd()`, `newDiagnoseCheckCmd()`, `newDiagnoseRunCmd()`)
+  - `internal/cli/diagnose.go` (defines parent `diagnose` command, its persistent `--timeout` flag, and registers `newDiagnoseInfoCmd()`, `newDiagnoseCheckCmd()`)
 * Core/business logic in `pkg/`:
   - `pkg/diagnose/info.go` (business logic for info)
   - `pkg/diagnose/check.go` (business logic for check)
-  - `pkg/diagnose/run.go` (business logic for run suite)
 
 ### Best Practices Used:
 1. **Command Consolidation (Single File per Primary Command)**:
    * Consolidate child commands inside the parent command file using unexported functions to keep the `internal/cli` directory neat and cohesive.
 2. **Persistent Flag Inheritance**:
-   * Defining the `--timeout` flag as `PersistentFlags().Duration(...)` on the root `diagnose` command makes it automatically visible and parseable in child commands (`check` and `run`).
+   * Defining the `--timeout` flag as `PersistentFlags().Duration(...)` on the root `diagnose` command makes it automatically visible and parseable in child commands (like `check`).
    * Retrieve inherited persistent flags inside child commands using `cmd.Flags().GetDuration("timeout")`.
 3. **Domain Isolation**:
    * Keeps related CLI flags and routing logic in `internal/cli/<cmd>.go` while core domain logic is decoupled inside the corresponding package folder `pkg/<cmd>/`.
+
 
 
 ---

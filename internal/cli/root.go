@@ -33,10 +33,10 @@ building production-ready CLI applications in Go.`,
   goclitmpl greet Alice --uppercase
   goclitmpl diagnose info
   goclitmpl diagnose check github.com:443
-  goclitmpl diagnose run --timeout 10s
   goclitmpl version --json
   goclitmpl config init`,
 		SilenceErrors: true, // errors are printed by Execute(), not by Cobra
+
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
 			// 1. Load configuration
 			cfg, err := config.Load(configFile)
