@@ -1,12 +1,12 @@
 # Codebase Rules & Guidelines for goclitmpl
 
-This document contains rules and instructions for agentic AI coders working on this CLI template repository. Always adhere to these constraints to preserve the codebase as a high-quality template.
+This document contains rules and instructions for agentic AI coders working on this CLI template repository. Always adhere to these constraints to preserve the codebase as a high-quality, minimal template.
 
 ---
 
 ## 1. Codebase Integrity & Documentation Sync
 
-* **Documentation Consistency**: Keep `README.md` and `DEVELOPER.md` fully in sync with the codebase structure, configuration file keys, environment variable prefixes, and subcommands.
+* **Documentation Consistency**: Keep `README.md` and `CONTRIBUTING.md` fully in sync with the codebase structure, configuration file keys, environment variable prefixes, and subcommands.
 * **Inline Comments**: All exported packages, structs, and methods must have standard Go documentation comments. Avoid redundant comments, but ensure complex code flows (like diagnostic net probes or custom logging handlers) are well-commented.
 * **No Code Duplication**: Keep business logic separated from the command routing interface. Always place CLI interaction in [internal/cli](file:///home/dat/repos/goclitmpl/internal/cli) and core logic in reusable packages under [pkg](file:///home/dat/repos/goclitmpl/pkg) or [internal/config](file:///home/dat/repos/goclitmpl/internal/config).
 
@@ -50,7 +50,7 @@ This document contains rules and instructions for agentic AI coders working on t
   .\build.ps1
   ```
   This runs code formatting (`go fmt`), security scanning (`govulncheck`), and standard linting.
-* **No Test Files**: This is a template repository. Test files (`_test.go`) are intentionally omitted so consumers can write tests tailored to their own business logic. Do **not** add `_test.go` files unless the user explicitly requests them.
+* **No Test Files**: This is a clean, minimal template. Test files (`_test.go`) are intentionally omitted, and no tests are needed. Do **not** add `_test.go` files to the repository.
 * **Linter Warnings**: Zero linter warnings are permitted. Add inline `//nolint:...` overrides only for verified false positives (such as `slog.Record` copy-by-value in custom log handlers).
 
 ---
@@ -64,3 +64,4 @@ This document contains rules and instructions for agentic AI coders working on t
 * **Required vs optional arg notation in `Use`**: Use angle brackets for required positional arguments (`<name>`) and square brackets for optional ones (`[address]`). Example: `Use: "greet <name>"`.
 * **`PersistentFlags` for shared flags**: Flags consumed by multiple subcommands (e.g., `--timeout` on `diagnose`) must be defined via `cmd.PersistentFlags()` on the parent, not repeated per-subcommand. Access them from leaf commands via `cmd.Flags().GetXxx("flag-name")`.
 * **Subcommand file layout**: Each CLI command lives in `internal/cli/<cmd>.go`. All subcommands of `<cmd>` are defined in that same file using unexported constructor functions (e.g., `newDiagnoseInfoCmd()`). Business logic lives in the corresponding `pkg/<cmd>/` package.
+
