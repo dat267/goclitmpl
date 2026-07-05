@@ -1,8 +1,8 @@
 package cli
 
 import (
-	internalconfig "github.com/dat267/goclitmpl/internal/config"
-	pkgconfig "github.com/dat267/goclitmpl/pkg/config"
+	"github.com/dat267/goclitmpl/internal/config"
+	"github.com/dat267/goclitmpl/pkg/configinit"
 	"github.com/spf13/cobra"
 )
 
@@ -39,10 +39,10 @@ func newConfigInitCmd() *cobra.Command {
 			}
 
 			// Get the default configuration template embedded in internal/config
-			cfgBytes := internalconfig.GetDefaultConfigTemplate()
+			cfgBytes := config.GetDefaultConfigTemplate()
 
-			// Call business logic in pkg/config
-			return pkgconfig.Initialize(cmd.OutOrStdout(), path, cfgBytes)
+			// Call business logic in pkg/configinit
+			return configinit.Initialize(cmd.OutOrStdout(), path, cfgBytes)
 		},
 	}
 
