@@ -10,7 +10,6 @@ permissions:
   contents: write
 
 env:
-  # Derived from the repo name (e.g. "dat267/goclitmpl" → "goclitmpl").
   BIN_NAME:       ${{ vars.BIN_NAME || github.event.repository.name }}
   KEEP_RELEASES:  ${{ vars.KEEP_RELEASES || '3' }}
 
@@ -27,9 +26,9 @@ jobs:
           - { goos: linux, goarch: arm }
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v4
 
-      - uses: actions/setup-go@v6
+      - uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
           cache: true
@@ -39,7 +38,7 @@ jobs:
           go test -v ./...
           go vet ./...
 
-      - name: Build
+      - name: Build binary
         env:
           GOOS:        ${{ matrix.goos }}
           GOARCH:      ${{ matrix.goarch }}
@@ -48,19 +47,19 @@ jobs:
           SUFFIX=""
           [ "${{ matrix.goos }}" = "windows" ] && SUFFIX=".exe"
           OUT="${{ env.BIN_NAME }}-${{ matrix.goos }}-${{ matrix.goarch }}${SUFFIX}"
-          
-          # Gather build-time version metadata
+
           SHORT_SHA=$(echo "${{ github.sha }}" | cut -c1-7)
           BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-          
-          go build \
-            -ldflags "-s -w \
-              -X github.com/dat267/goclitmpl/internal/cli.Version=${SHORT_SHA} \
-              -X github.com/dat267/goclitmpl/internal/cli.Commit=${{ github.sha }} \
-              -X github.com/dat267/goclitmpl/internal/cli.Date=${BUILD_DATE}" \
-            -o "$OUT" ./cmd/goclitmpl
 
-      - uses: actions/upload-artifact@v7
+          go build \
+            -v \
+            -ldflags "-s -w \
+              -X github.com/dat267/goclitmpl/cmd.Version=${SHORT_SHA} \
+              -X github.com/dat267/goclitmpl/cmd.Commit=${{ github.sha }} \
+              -X github.com/dat267/goclitmpl/cmd.Date=${BUILD_DATE}" \
+            -o "$OUT" .
+
+      - uses: actions/upload-artifact@v4
         with:
           name: ${{ env.BIN_NAME }}-${{ matrix.goos }}-${{ matrix.goarch }}
           path: ${{ env.BIN_NAME }}-${{ matrix.goos }}-${{ matrix.goarch }}*
@@ -69,7 +68,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v8
+      - uses: actions/download-artifact@v4
         with:
           merge-multiple: true
 
@@ -80,7 +79,7 @@ jobs:
           echo "tag=${{ env.BIN_NAME }}/${SHORT_SHA}" >> "$GITHUB_OUTPUT"
           echo "name=Release ${{ env.BIN_NAME }}/${SHORT_SHA}" >> "$GITHUB_OUTPUT"
 
-      - uses: softprops/action-gh-release@v3
+      - uses: softprops/action-gh-release@v2
         with:
           tag_name:               ${{ steps.meta.outputs.tag }}
           name:                   ${{ steps.meta.outputs.name }}

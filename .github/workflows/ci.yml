@@ -17,11 +17,11 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.25"
+          go-version-file: 'go.mod'
           cache: true
 
       - name: Run tests
-        run: make test
+        run: go test -v ./...
 
       - name: Verify build execution
-        run: make build
+        run: go build -v .
