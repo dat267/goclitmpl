@@ -46,7 +46,7 @@ goclitmpl/
 │       └── logging.go
 ├── Makefile            # Project tasks runner (build, test, lint, etc.)
 ├── pkg/                # Public/reusable library packages (decoupled logic)
-│   ├── configinit/     # Business logic for config management
+│   ├── config/         # Business logic for config management
 │   │   └── init.go
 │   ├── diagnose/       # Business logic for system diagnostics
 │   │   ├── check.go

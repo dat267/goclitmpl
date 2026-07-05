@@ -1,5 +1,5 @@
-// Package configinit provides business logic for configuration file initialization.
-package configinit
+// Package config provides business logic for configuration management.
+package config
 
 import (
 	"fmt"
